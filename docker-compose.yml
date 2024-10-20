@@ -1,0 +1,25 @@
+services:
+  api:
+    build:
+      context: ./api
+    container_name: api
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./api:/app
+      - ./data:/data
+    ports:
+      - "8000:8000"
+    environment:
+      - TOGETHERAI_API_KEY=${TOGETHERAI_API_KEY}
+      - TOGETHERAI_MODEL=${TOGETHERAI_MODEL}
+
+  web:
+    build:
+      context: ./web
+    container_name: web
+    ports:
+      - "3000:80"
+    volumes:
+      - ./app.conf:/etc/nginx/conf.d/app.conf
+    depends_on:
+      - api
