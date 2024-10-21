@@ -48,14 +48,14 @@ async def upload_file(file: UploadFile = None):
 
 @router.get("/paths/default/")
 async def paths_default():
-    paths = list(disk_default_dir.glob("*"))
+    paths = list(disk_default_dir.glob("*.xlsx"))
     paths = [str(path.relative_to(disk_default_dir)) for path in paths]
     return {"paths": paths}
 
 
 @router.get("/paths/custom/")
 async def paths_custom():
-    paths = list(disk_custom_dir.glob("*"))
+    paths = list(disk_custom_dir.glob("*.xlsx"))
     paths = [str(path.relative_to(disk_custom_dir)) for path in paths]
     return {"paths": paths}
 
