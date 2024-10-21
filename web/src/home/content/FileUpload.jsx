@@ -12,7 +12,7 @@ function FileUpload() {
   const handleFileChange = (info) => {
     const { status } = info.file;
     if (status !== "uploading") {
-      console.log(info.file, info.fileList);
+      console.debug(info.file, info.fileList);
     }
     if (status === "done") {
       message.success(`${info.file.name} file uploaded successfully.`);
@@ -22,7 +22,7 @@ function FileUpload() {
   };
 
   return (
-    <div style={{ maxWidth: "800px" }}>
+    <div style={{ maxWidth: "800px", margin: "auto" }}>
       <div style={{ padding: "20px" }}>
         <Radio.Group
           value={tabPosition}

@@ -5,12 +5,12 @@ import ReactMarkdown from "react-markdown";
 import "./Chat.scss";
 
 const Chat = () => {
-  const { conversations, currentConversation } = useContext(ResponseContext);
-  const responses = conversations[currentConversation];
+  const { chats, currentChat } = useContext(ResponseContext);
+  const { responses } = chats[currentChat] || {};
 
   return (
     <div className="chat-container">
-      {responses.map((response, index) => (
+      {responses?.map((response, index) => (
         <div
           key={index}
           style={{

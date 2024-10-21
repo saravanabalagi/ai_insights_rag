@@ -1,13 +1,14 @@
 import { ResponseContext } from "@/contexts/Responses.jsx";
-import ConversationsSidebar from "@/home/sidebar/Conversations.jsx";
+import ChatsList from "@/home/sidebar/ChatsList.jsx";
 import { EditOutlined, LayoutOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useContext } from "react";
 import "./Sidebar.scss";
 
 const SideBar = ({ setCollapsed }) => {
-  const { startNewConversation } = useContext(ResponseContext);
+  const { setCurrentChat } = useContext(ResponseContext);
   const handleCollapse = () => setCollapsed(true);
+  const handleNewChat = () => setCurrentChat(null);
   return (
     <div
       style={{
@@ -35,13 +36,13 @@ const SideBar = ({ setCollapsed }) => {
             style={{ fontSize: "18px", cursor: "pointer" }}
           />
         </Button>
-        <Button variant="text" color="default" onClick={startNewConversation}>
+        <Button variant="text" color="default" onClick={handleNewChat}>
           <EditOutlined
             style={{ fontSize: "18px", cursor: "pointer" }}
           />
         </Button>
       </div>
-      <ConversationsSidebar />
+      <ChatsList />
     </div>
   );
 };

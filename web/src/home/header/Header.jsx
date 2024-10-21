@@ -5,7 +5,7 @@ import { useContext } from "react";
 import Models from "./Models.jsx";
 
 const Header = ({ collapsed, setCollapsed }) => {
-  const { startNewConversation } = useContext(ResponseContext);
+  const { startNewShat } = useContext(ResponseContext);
   const handleCollapse = () => setCollapsed(false);
   return (
     <div
@@ -35,7 +35,7 @@ const Header = ({ collapsed, setCollapsed }) => {
             <Button
               variant="text"
               color="default"
-              onClick={startNewConversation}
+              onClick={startNewShat}
             >
               <EditOutlined
                 style={{ fontSize: "18px", cursor: "pointer" }}
