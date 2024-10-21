@@ -65,5 +65,6 @@ def preprocess_xsls(file_paths):
 
     # Create embeddings
     embeddings = model.encode(combined_texts, convert_to_numpy=True)
-    print("Emebddings: ", file_paths, embeddings.shape)
     store_datasets(data_frames, embeddings, None)
+    print(f"Added {len(data_frames)} datasets to the store.")
+    print(f"Added embeddings of shape {embeddings.shape} to the store.")

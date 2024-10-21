@@ -2,11 +2,10 @@ fastapi
 uvicorn
 pandas
 requests
-faiss-cpu
+faiss-gpu
 together
---extra-index-url https://download.pytorch.org/whl/cpu
-torch
 sentence-transformers
+# sentence transformers will install torch with cuda
 python-multipart
 openpyxl
 ruff

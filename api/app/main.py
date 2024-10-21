@@ -90,7 +90,9 @@ async def root():
 
 def load_data_from_default_disk():
     xlsx_files = list(disk_default_dir.glob("*.xlsx"))
+    print(f"Found {len(xlsx_files)} files. Preprocessing...")
     preprocess_xsls(xlsx_files)
+    print(f"Preprocessed {len(xlsx_files)} files in default directory")
 
 
 app.include_router(router, prefix="/api")
