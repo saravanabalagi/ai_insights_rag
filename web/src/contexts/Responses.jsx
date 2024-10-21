@@ -32,6 +32,34 @@ export const ResponseProvider = ({ children }) => {
     }));
   };
 
+  const updateLastResponseChunk = (id, chunk) => {
+    if (id == null) {
+      console.error("No chat selected to update response.");
+      return;
+    }
+    setChats((prevChats) => {
+      const chat = prevChats[id];
+      if (!chat || chat.responses.length === 0) {
+        console.error("No responses to update.");
+        return prevChats;
+      }
+      const lastResponseIndex = chat.responses.length - 1;
+      const updatedResponses = [...chat.responses];
+      updatedResponses[lastResponseIndex] = {
+        ...updatedResponses[lastResponseIndex],
+        text: (updatedResponses[lastResponseIndex].text || "") + chunk,
+      };
+      return {
+        ...prevChats,
+        [id]: {
+          ...chat,
+          responses: updatedResponses,
+          modified: new Date().toISOString(),
+        },
+      };
+    });
+  };
+
   const startNewChat = () => {
     const newId = nextId;
     setChats((prevChats) => ({
@@ -80,6 +108,7 @@ export const ResponseProvider = ({ children }) => {
         renameChat,
         deleteChat,
         nextChatId: nextId,
+        updateLastResponseChunk,
       }}
     >
       {children}

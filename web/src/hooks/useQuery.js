@@ -4,7 +4,13 @@ import { useContext, useState } from "react";
 
 const useQueryHandler = () => {
   const [loading, setLoading] = useState(false);
-  const { currentChat, addResponse, startNewChat, nextChatId } = useContext(
+  const {
+    currentChat,
+    addResponse,
+    startNewChat,
+    nextChatId,
+    updateLastResponseChunk,
+  } = useContext(
     ResponseContext,
   );
 
@@ -24,8 +30,19 @@ const useQueryHandler = () => {
           rag_type: ragType,
         }),
       });
-      const data = await response.json();
-      addResponse(id, { text: data.response, isUser: false });
+
+      if (response.ok) {
+        addResponse(id, { text: "", isUser: false });
+      }
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        updateLastResponseChunk(id, chunk);
+      }
       return true;
     } catch (error) {
       console.error("Error submitting query:", error);

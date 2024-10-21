@@ -6,21 +6,15 @@ from pathlib import Path
 from fastapi import APIRouter, FastAPI, File, UploadFile
 from pydantic import BaseModel
 
-from app.constants import models
 from app.llm import query_llm
 from app.preprocess import preprocess_xsls
+from app.store import store
 
 app = FastAPI()
 router = APIRouter()
 data_dir = Path("/data")
 disk_default_dir = data_dir / "default"
 disk_custom_dir = data_dir / "custom"
-
-store = {
-    "model": os.getenv("TOGETHERAI_MODEL"),
-    "api_key": os.getenv("TOGETHERAI_API_KEY"),
-    "models": models,
-}
 
 
 class Query(BaseModel):
@@ -65,8 +59,7 @@ async def query(q: Query):
     if not q.msg:
         return {"response": "Please provide a msg in request body."}
 
-    response_text = query_llm(q.msg, q.rag_type)
-    return {"response": response_text}
+    return query_llm(q.msg, q.rag_type)
 
 
 @router.get("/models/")
@@ -92,7 +85,7 @@ def load_data_from_default_disk():
     xlsx_files = list(disk_default_dir.glob("*.xlsx"))
     print(f"Found {len(xlsx_files)} files. Preprocessing...")
     preprocess_xsls(xlsx_files)
-    print(f"Preprocessed {len(xlsx_files)} files in default directory")
+    print(f"Preprocessed {len(xlsx_files)} files in default directory completed")
 
 
 app.include_router(router, prefix="/api")

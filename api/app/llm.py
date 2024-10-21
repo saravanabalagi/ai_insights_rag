@@ -1,9 +1,10 @@
 import os
 
+from fastapi.responses import StreamingResponse
 from sentence_transformers import SentenceTransformer
 from together import Together
 
-from app.store import get_datasets
+from app.store import store
 
 
 def query_llm(user_query, rag_type):
@@ -23,10 +24,10 @@ def query_llm(user_query, rag_type):
         return generate_ai_response(user_query)
 
     # Retrieve datasets and FAISS index
-    store = get_datasets()
-    faiss_index = store["faiss_index"]
-    data_frames = store["data_frames"]
-    embeddings = store["embeddings"]
+    ds = store["datasets"]
+    str_list = ds["str_list"]
+    embeddings = ds["embeddings"]
+    faiss_index = ds["faiss_index"]
 
     if faiss_index is None or embeddings is None:
         return "No datasets are currently available. Please upload datasets first."
@@ -39,35 +40,20 @@ def query_llm(user_query, rag_type):
 
     # Perform similarity search using FAISS
     k = 5  # Number of nearest neighbors to retrieve
-    distances, indices = faiss_index.search(query_embedding, k)
+    _, indices = faiss_index.search(query_embedding, k)
 
-    # Retrieve relevant data based on indices
-    relevant_texts = []
-    for idx in indices[0]:
-        # Determine which DataFrame the index corresponds to
-        cumulative_lengths = [0]
-        total_length = 0
-        for df_i in data_frames:
-            total_length += len(df_i)
-            cumulative_lengths.append(total_length)
+    # Get the corresponding text snippets from str_list
+    context_snippets = [str_list[idx] for idx in indices[0]]
+    if not context_snippets:
+        print("No similar context found.")
+        print(f'Query: "{user_query}"')
+        print(f"Indices: {indices[0]}")
+    context = "\n".join(context_snippets)
 
-        # Find the DataFrame and row index
-        for i in range(len(cumulative_lengths) - 1):
-            if cumulative_lengths[i] <= idx < cumulative_lengths[i + 1]:
-                df_i = data_frames[i]
-                row_idx = idx - cumulative_lengths[i]
-                relevant_text = df_i.iloc[row_idx]["Combined_Text"]
-                relevant_texts.append(relevant_text)
-                break
-
-    # Prepare the prompt for the language model
-    context = "\n".join(relevant_texts)
     prompt = f"Context:\n{context}\n\nQuestion:\n{user_query}\n\nAnswer:"
 
     # Query the Together.ai language model
-    response_text = generate_ai_response(prompt)
-
-    return response_text
+    return generate_ai_response(prompt)
 
 
 def generate_ai_response(prompt: str):
@@ -84,7 +70,7 @@ def generate_ai_response(prompt: str):
     model = os.getenv("TOGETHERAI_MODEL")
 
     client = Together(api_key=api_key)
-    response = client.chat.completions.create(
+    stream = client.chat.completions.create(
         model=model,
         messages=[
             {
@@ -92,6 +78,19 @@ def generate_ai_response(prompt: str):
                 "content": prompt,
             },
         ],
+        stream=True,
     )
 
-    return response.choices[0].message.content
+    # Define a generator that yields each chunk of content
+    def event_generator():
+        for chunk in stream:
+            # Extract the content from the chunk
+            choices = chunk.choices
+            if not choices:
+                continue
+            content = chunk.choices[0].delta.content or ""
+            if content:
+                yield content
+
+    # return streaming response
+    return StreamingResponse(event_generator(), media_type="text/plain")
