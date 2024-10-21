@@ -5,7 +5,7 @@
 This simple weekend project is a web app that to do Retrieal Augmented
 Generation (RAG) on your data using AI. In simple terms, it performs search
 within your documents using natural language queries. You will need LLM API keys
-to use this app.
+to deploy and use it.
 
 Given the time, this app only showcases the art of the possible, bringing
 together some standard libraries in a neat clean way. As such, a lot more needs
@@ -16,6 +16,10 @@ The app is built with:
 
 - Python FastAPI backend
 - React frontend
+
+## Screenshot
+
+![Screenshot](assets/screenshot.png)
 
 ## Quick Start (Development)
 
@@ -81,14 +85,38 @@ This setup (deno + ruff) conveniently avoids the need to install and configure
 individual linters and formatters like Babel, TSConfig, ESLint, Prettier, flake,
 black, etc. and keeps the file structure clean and easy to manage.
 
+For now the data processing and retrieval is done using a simple Python script
+
+- Excel files are read to a dataframe and converted to list of strings along
+  with column headers
+- Since the data correlation is both row and column based, the dataframe is
+  transposed and converted to a list of strings
+- Now the combined list of strings is passed to Sentence Transformers to get the
+  embeddings
+- When a user query arrives, the query is converted to embeddings and FAISS is
+  used to find the nearest embeddings for context
+- Then the context is passed to the LLM* to get insights
+- The current implementation is reasonably* generalisable
+
+*At the moment, the fact that the seed excel sheets contains first 2 rows as
+headers is hard-coded. In addition, the start rows and columns is also
+explicitly given
+
+*Quality of insights is also dependent on the choice of LLM model used
+
 ### Features
 
-- Choice of AI model (on top left)
-- Conversation history (on the sidebar)
-- Choose between default and custom RAG disks
-- Seed XSLX files placed in default RAG disk
-- Upload XSLX files to custom RAG disk
-- Chat interface with markdown support
+- [x] Choice of AI model (on top left)
+- [x] Conversation history (on the sidebar)
+- [x] Choose between default, custom or no RAG disk
+- [x] Seed XSLX files placed in default RAG disk
+- [x] Chat interface with markdown support
+
+TODOs:
+
+- [ ] Process uploaded XSLX files to custom RAG disk
+- [ ] User authentication
+- [ ] Database for storing user data
 
 ## Deployment
 
@@ -148,6 +176,12 @@ sudo docker-compose build
 sudo docker-compose up -d
 ```
 
-Expect the docker-compose build to take a while especially on f1-micro! Take a
-nap or grab a coffee. Or maybe even go to sleep, and check back next morning!
-Then run the compose up command.
+Expect the docker-compose build to take a while especially on f1-micro! Also
+note that the memory that comes with f1-micro, ~512 MB is insufficient. Create
+swap space of at least 1 GB and then run the build process. If necessary run
+each pip install as a separate step in `api/Dockerfile` to take advantage of the
+Docker layers, lest the process gets killed and you have to start over.
+
+I would recommend running the build process in the background, inside tmux for
+example. Once the build is complete, `up` shouldn't take much time. Take a nap
+or grab a coffee. Or maybe even go to sleep, and check back next morning!

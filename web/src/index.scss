@@ -54,6 +54,7 @@ button {
 }
 
 input {
+
   &:focus,
   &:focus-visible {
     outline: 0px auto -webkit-focus-ring-color;
@@ -62,21 +63,6 @@ input {
 
 .ant-dropdown .ant-dropdown-menu {
   background-color: #2b2b2b;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
 }
 
 .p-0 {
