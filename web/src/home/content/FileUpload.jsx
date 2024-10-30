@@ -30,7 +30,6 @@ function FileUpload() {
           buttonStyle="solid"
         >
           <Radio.Button value="default">Default Disk</Radio.Button>
-          <Radio.Button value="custom">Custom Disk</Radio.Button>
           <Radio.Button value="none">No RAG Disk</Radio.Button>
         </Radio.Group>
       </div>
@@ -56,7 +55,6 @@ function FileUpload() {
         </Upload.Dragger>
       )}
       {tabPosition === "default" && <Paths url={pathsDefaultUrl} />}
-      {tabPosition === "custom" && <Paths url={pathsCustomUrl} />}
     </div>
   );
 }
