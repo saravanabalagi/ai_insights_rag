@@ -2,6 +2,7 @@ import { ResponseContext } from "@/contexts/Responses.jsx";
 import { EditOutlined, LayoutOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useContext } from "react";
+import MadeBy from "./MadeBy.jsx";
 import Models from "./Models.jsx";
 
 const Header = ({ collapsed, setCollapsed }) => {
@@ -46,6 +47,7 @@ const Header = ({ collapsed, setCollapsed }) => {
         )}
         <Models />
       </div>
+      <MadeBy />
     </div>
   );
 };
