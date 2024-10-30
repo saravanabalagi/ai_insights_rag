@@ -58,7 +58,7 @@ const ChatsList = () => {
             className={`chat-item ${currentChat === k ? "active" : ""}`}
             onClick={() => setCurrentChat(Number(k))}
           >
-            <div>
+            <div className="text">
               {v.name}
             </div>
             <div className="action-dropdown">
