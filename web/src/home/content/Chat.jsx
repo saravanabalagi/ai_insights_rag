@@ -13,21 +13,10 @@ const Chat = () => {
       {responses?.map((response, index) => (
         <div
           key={index}
-          style={{
-            display: "flex",
-            marginBottom: "8px",
-          }}
           className={`chat-bubble ${response.isUser ? "user" : "server"}`}
         >
           {!response.isUser && (
-            <div
-              style={{
-                padding: "4px 8px 6px",
-                borderRadius: "50%",
-                border: "1px solid #444",
-                marginRight: "20px",
-              }}
-            >
+            <div className="chat-icon">
               <ExperimentOutlined />
             </div>
           )}

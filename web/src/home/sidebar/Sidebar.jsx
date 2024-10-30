@@ -10,36 +10,17 @@ const SideBar = ({ setCollapsed }) => {
   const handleCollapse = () => setCollapsed(true);
   const handleNewChat = () => setCurrentChat(null);
   return (
-    <div
-      style={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        lineHeight: 1,
-      }}
-    >
-      <div
-        className="p-4"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+    <div className="sidebar">
+      <div className="icon-wrapper p-4">
         <Button
           variant="text"
           color="default"
           onClick={handleCollapse}
         >
-          <LayoutOutlined
-            style={{ fontSize: "18px", cursor: "pointer" }}
-          />
+          <LayoutOutlined />
         </Button>
         <Button variant="text" color="default" onClick={handleNewChat}>
-          <EditOutlined
-            style={{ fontSize: "18px", cursor: "pointer" }}
-          />
+          <EditOutlined />
         </Button>
       </div>
       <ChatsList />

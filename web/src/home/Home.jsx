@@ -16,6 +16,7 @@ const siderStyle = {
   lineHeight: "120px",
   color: "#eee",
   backgroundColor: "#151515",
+  zIndex: 2,
 };
 const headerStyle = {
   padding: "0 30px",
@@ -50,7 +51,8 @@ const Home = () => {
           collapsed={collapsed}
           onCollapse={setCollapsed}
           collapsedWidth={0}
-          width="15%"
+          breakpoint="lg"
+          width={260}
           style={siderStyle}
           trigger={null}
         >

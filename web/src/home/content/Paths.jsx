@@ -1,6 +1,7 @@
 import useFetchPaths from "@/hooks/usePaths.js";
 import { DownloadOutlined } from "@ant-design/icons";
 import { Button, List } from "antd";
+import "./Paths.scss";
 
 const Paths = ({ url }) => {
   const { data, loading, error } = useFetchPaths(url);
@@ -8,7 +9,7 @@ const Paths = ({ url }) => {
   return (
     <div>
       {error && (
-        <div style={{ color: "red", padding: "20px" }}>
+        <div className="error">
           Error loading files: {error}
         </div>
       )}
@@ -20,18 +21,14 @@ const Paths = ({ url }) => {
           dataSource={files}
           renderItem={(item) => (
             <List.Item>
-              <div
-                style={{
-                  flex: 1,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div>{item}</div>
+              <div className="paths-list-item">
+                <div className="name">
+                  {item}
+                </div>
                 <div>
                   <Button
                     type="text"
+                    size="small"
                     onClick={() => window.open(`${url}/${item}`)}
                     icon={<DownloadOutlined />}
                   />

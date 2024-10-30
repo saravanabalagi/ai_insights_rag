@@ -1,0 +1,16 @@
+.rag-disk-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    margin: auto;
+}
+
+.rag-disk-choices {
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .rag-disk-choices {
+        margin-top: 10px;
+    }
+}

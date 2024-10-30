@@ -1,51 +1,46 @@
 import { ResponseContext } from "@/contexts/Responses.jsx";
 import { EditOutlined, LayoutOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, Grid } from "antd";
 import { useContext } from "react";
+import "./Header.scss";
 import MadeBy from "./MadeBy.jsx";
 import Models from "./Models.jsx";
 
+const getNewButton = (action) => (
+  <Button
+    variant="text"
+    color="default"
+    onClick={action}
+  >
+    <EditOutlined />
+  </Button>
+);
+
 const Header = ({ collapsed, setCollapsed }) => {
-  const { startNewShat } = useContext(ResponseContext);
+  const screens = Grid.useBreakpoint();
+  const { startNewChat } = useContext(ResponseContext);
   const handleCollapse = () => setCollapsed(false);
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+    <div className="header">
+      <div className="model-wrapper">
         {collapsed && (
-          <>
-            <div style={{ marginLeft: "-18px" }} />
+          <div className="icon-wrapper">
             <Button
               variant="text"
               color="default"
               onClick={handleCollapse}
             >
-              <LayoutOutlined
-                style={{ fontSize: "18px", cursor: "pointer" }}
-              />
+              <LayoutOutlined />
             </Button>
-            <Button
-              variant="text"
-              color="default"
-              onClick={startNewShat}
-            >
-              <EditOutlined
-                style={{ fontSize: "18px", cursor: "pointer" }}
-              />
-            </Button>
-            <div className="mr-4" />
-          </>
+            {!screens.xs && getNewButton(startNewChat)}
+          </div>
         )}
-        <Models />
+        <div className="dropdown-wrapper">
+          <Models />
+        </div>
+        <div className="icon-wrapper end">
+          {collapsed && screens.xs && getNewButton(startNewChat)}
+        </div>
       </div>
       <MadeBy />
     </div>

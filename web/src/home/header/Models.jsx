@@ -10,13 +10,7 @@ const toMenuItems = (models, model, handleMenuItemClick) => {
     label: (
       <div
         key={m.id}
-        className="p-2"
-        style={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
+        className="p-2 model-option"
         onClick={() => handleMenuItemClick(m)}
       >
         <div>
@@ -77,18 +71,10 @@ const ChooseModel = () => {
       >
         <a onClick={(e) => e.preventDefault()}>
           <Space>
-            <div
-              style={{ fontSize: "18px", color: "#AAA", fontWeight: "bold" }}
-            >
+            <div className="model-name">
               {loading ? "Loading..." : chosenModel(models, model)?.name}
             </div>
-            <DownOutlined
-              style={{
-                color: "#AAA",
-                fontSize: "12px",
-                transform: "scaleY(0.7) translateY(2px)",
-              }}
-            />
+            <DownOutlined className="down-icon" />
           </Space>
         </a>
       </Dropdown>

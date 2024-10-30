@@ -1,5 +1,4 @@
 import { HeartFilled } from "@ant-design/icons";
-import "./MadeBy.scss";
 
 const MadeBy = () => {
     const url = "https://github.com/saravanabalagi";

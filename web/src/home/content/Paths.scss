@@ -1,0 +1,26 @@
+.error {
+    color: red;
+    padding: 20px;
+}
+
+.paths-list-item {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: calc(100% - 40px);
+    }
+}
+
+@media (max-width: 768px) {
+    .paths-list-item {
+        .name {
+            font-size: 13px;
+        }
+    }
+}

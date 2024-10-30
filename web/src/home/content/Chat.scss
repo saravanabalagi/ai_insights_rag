@@ -11,6 +11,15 @@
   padding: 10px;
   border-radius: 10px;
   color: white;
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.chat-icon {
+  padding: 4px 8px 6px;
+  border-radius: 50%;
+  border: 1px solid #444;
+  margin-right: 20px;
 }
 
 .user {
@@ -36,5 +45,15 @@
 
   > :last-child {
     margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .chat-bubble {
+    max-width: inherit;
+  }
+
+  .chat-icon {
+    display: none;
   }
 }

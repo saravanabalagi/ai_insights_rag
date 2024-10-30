@@ -4,6 +4,7 @@ import Paths from "@/home/content/Paths.jsx";
 import { InboxOutlined } from "@ant-design/icons";
 import { message, Radio, Upload } from "antd";
 import { useContext } from "react";
+import "./FileUpload.scss";
 
 function FileUpload() {
   const { tabPosition, setTabPosition } = useContext(RagTypeContext);
@@ -22,8 +23,8 @@ function FileUpload() {
   };
 
   return (
-    <div style={{ maxWidth: "800px", margin: "auto" }}>
-      <div style={{ padding: "20px" }}>
+    <div className="rag-disk-wrapper">
+      <div className="rag-disk-choices">
         <Radio.Group
           value={tabPosition}
           onChange={changeTabPosition}
