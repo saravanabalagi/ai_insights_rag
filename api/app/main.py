@@ -3,7 +3,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from fastapi import APIRouter, FastAPI, File, UploadFile
+from fastapi import APIRouter, FastAPI, File, HTTPException, UploadFile
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from app.llm import query_llm
@@ -40,18 +41,21 @@ async def upload_file(file: UploadFile = None):
     return {"status": "success", "file": file.filename}
 
 
-@router.get("/paths/default/")
-async def paths_default():
-    paths = list(disk_default_dir.glob("*.xlsx"))
-    paths = [str(path.relative_to(disk_default_dir)) for path in paths]
-    return {"paths": paths}
-
-
-@router.get("/paths/custom/")
-async def paths_custom():
-    paths = list(disk_custom_dir.glob("*.xlsx"))
-    paths = [str(path.relative_to(disk_custom_dir)) for path in paths]
-    return {"paths": paths}
+@router.get("/data/{filepath:path}")
+async def get_data(filepath: str):
+    path_full = data_dir / filepath
+    if path_full.is_dir():
+        files = path_full.glob("*")
+        files = [str(p.relative_to(path_full)) for p in files]
+        files = [f for f in files if not f.startswith(".")]
+        return {"files": files}
+    if not path_full.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(
+        path=path_full,
+        filename=path_full.name,
+        media_type="application/octet-stream",
+    )
 
 
 @router.post("/query/")
